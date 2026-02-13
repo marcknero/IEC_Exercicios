@@ -3,4 +3,10 @@
 
  Com base em um projeto fictício, apenas para estudo das entregas e praticas dos exercicios executados em sala, ou por solicitação da professora.
 
-...
+---
+
+# Aplicativo INPE - Monitoramento de Eventos Climáticos
+
+_Objetivo:_ App movel para alerta de queimadas, inundações, desmatamento, e relatos da população em tempo real.
+
+
