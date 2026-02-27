@@ -1,4 +1,3 @@
-#nome do workflow a ser demonstrado na aba actions
 name: CI Simples 2
 
 #eventos que dispararam o workflow
