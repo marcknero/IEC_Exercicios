@@ -1,0 +1,23 @@
+#nome do workflow a ser demonstrado na aba actions
+name: CI Simples 2
+
+#eventos que dispararam o workflow
+# push e PR
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  #definindo um jog(trabalho) chamado build
+  build:
+    runs-on: ubuntu-latest #ambiente que o github usa para rodar
+  steps:
+    #baixar o cod do repositorio
+    -name: Baixar o codigo do Repositório
+    uses: actions/checkout@v4
+    #executa comando simples
+    -name: Teste de Funcionamento
+    run: echo "CI Funcionando no projeto INPE"
