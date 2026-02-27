@@ -9,4 +9,7 @@
 
 _Objetivo:_ App movel para alerta de queimadas, inundações, desmatamento, e relatos da população em tempo real.
 
+_Nome do app, e demais, serão ficticios e temporarios, apenas para efeito de estudos_
 
+_finalmente foi sem erros de sintaxe ou afins_
+_teste do PR, para verificação de funcionalidade do CI_
