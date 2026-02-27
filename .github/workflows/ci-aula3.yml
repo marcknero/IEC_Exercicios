@@ -1,19 +1,16 @@
 name: CI Simples 2
 
-#eventos que dispararam o workflow
-# push e PR
-
  on:
   push:
-    branches: [dev]
+    branches: ["dev"]
   pull_request:
-    branches: [dev]
+    branches: ["dev"]
 
 jobs:
-  build: #definindo um jog(trabalho) chamado build
-    runs-on: ubuntu-latest #ambiente que o github usa para rodar
-  steps:    #baixar o cod do repositorio
+  build:
+    runs-on: ubuntu-latest 
+  steps:    
     -name: Baixar o codigo do Repositório 2
-    uses: actions/checkout@v4    #executa comando simples
+    uses: actions/checkout@v4    
     -name: Teste de Funcionamento 2
     run: echo "CI Funcionando no projeto INPE"
