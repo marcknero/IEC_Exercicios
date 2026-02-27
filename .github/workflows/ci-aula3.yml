@@ -1,4 +1,4 @@
-name: CI Simples 2
+ name: CI Simples 2
 
 #eventos que dispararam o workflow
 # push e PR
@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest #ambiente que o github usa para rodar
   steps:
     #baixar o cod do repositorio
-    -name: Baixar o codigo do Repositório
+    -name: Baixar o codigo do Repositório 2
     uses: actions/checkout@v4
     #executa comando simples
-    -name: Teste de Funcionamento
+    -name: Teste de Funcionamento 2
     run: echo "CI Funcionando no projeto INPE"
