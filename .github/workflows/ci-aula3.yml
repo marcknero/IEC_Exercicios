@@ -14,4 +14,4 @@ jobs:
     - name: Checkout do repositorio
       uses: actions/checkout@v4    
     - name: Teste de Funcionamento 2
-      run: echo "CI Funcionando no projeto INPE"
+      run: echo "Pipeline do projeto INPE executado com Sucesso"
