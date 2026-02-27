@@ -1,9 +1,9 @@
- name: CI Simples 2
+name: CI Simples 2
 
 #eventos que dispararam o workflow
 # push e PR
 
-on:
+ on:
   push:
     branches: [dev]
   pull_request:
