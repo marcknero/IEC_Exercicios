@@ -11,4 +11,4 @@ _Objetivo:_ App movel para alerta de queimadas, inundações, desmatamento, e re
 
 _Nome do app, e demais, serão ficticios e temporarios, apenas para efeito de estudos_
 
-_adição de teste para CI aula3_
+_adição de teste para CI aula3, testando novamente, correção bug_
