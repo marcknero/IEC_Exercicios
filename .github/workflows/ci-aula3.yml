@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    
+
     steps:
     - name: Checkout do repositorio
-    uses: actions/checkout@v4    
+      uses: actions/checkout@v4    
     - name: Teste de Funcionamento 2
-    run: echo "CI Funcionando no projeto INPE"
+      run: echo "CI Funcionando no projeto INPE"
