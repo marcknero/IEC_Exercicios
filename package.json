@@ -1,0 +1,35 @@
+{
+  "name": "iec_exercicios",
+  "version": "1.0.0",
+  "description": "Repositorio para entrega dos exercicios propostos em sala, pela professora Lucineide Pimenta, durante a formação em Desenvolvimento de Software Multiplataforma - FATEC Jacareí, para matéria de Integração e Entrega Contínua",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcknero/IEC_Exercicios.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/marcknero/IEC_Exercicios/issues"
+  },
+  "homepage": "https://github.com/marcknero/IEC_Exercicios#readme",
+  "devDependencies": {
+    "babel-eslint": "8.2.1",
+    "eslint": "4.17.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-config-mfe": "0.1.2",
+    "eslint-plugin-import": "2.8.0",
+    "husky": "0.14.3",
+    "lint-staged": "6.1.0",
+    "prettier": "^3.8.1"
+  },
+  "lint-staged": {
+    "*.js": "eslint"
+  }
+}

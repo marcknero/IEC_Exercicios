@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do repositorio
-      uses: actions/checkout@v4    
-    - name: Teste de Funcionamento 2
-      run: echo "Pipeline do projeto INPE executado com Sucesso"
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+      - name: Teste de Funcionamento 2
+        run: echo "Pipeline do projeto INPE executado com Sucesso"
