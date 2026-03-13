@@ -4,7 +4,7 @@
   "description": "Repositorio para entrega dos exercicios propostos em sala, pela professora Lucineide Pimenta, durante a formação em Desenvolvimento de Software Multiplataforma - FATEC Jacareí, para matéria de Integração e Entrega Contínua",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "precommit": "lint-staged"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "eslint-config-mfe": "0.1.2",
     "eslint-plugin-import": "2.8.0",
     "husky": "0.14.3",
+    "jest": "^30.3.0",
     "lint-staged": "6.1.0",
     "prettier": "^3.8.1"
   },
