@@ -1,25 +1,28 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: CI Simples
+name: CI com ESlint
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: ["dev"]
   pull_request:
-    branches: [ "dev" ]
+    branches: ["dev"]
 
 jobs:
-  build:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do repositorio
-      uses: actions/checkout@v4
-    - name: configurar node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    - name: teste de funcionamento
-      run: echo "CI funcionando"
-      
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+      - name: configurar node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: instalar as dependencias
+        run: npm install
+      - name: rodar ESlint
+        run: npx eslint .
+      - name: rodar Jest
+        run: npm test
