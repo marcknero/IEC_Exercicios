@@ -1,0 +1,52 @@
+name: Teste de Monitoramento Aula 5
+on: [push]
+
+jobs:
+  check-stack:
+    runs-on: ubuntu-latest
+
+    # Sobe todos os serviços da aula como containers temporários
+    services:
+      prometheus:
+        image: prom/prometheus:latest
+        volumes:
+          - ${{ github.workspace }}/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+        ports: [9090:9090]
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: false
+        ports: [9200:9200]
+
+      loki:
+        image: grafana/loki:latest
+        ports: [3100:3100]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install & Run App
+        run: |
+          npm install
+          # Cria o arquivo de log que o Logstash espera (Exercício 2)
+          touch app.log 
+          node index.js > app.log & 
+          sleep 20 # Tempo para os serviços "respirarem"
+
+      - name: Validar Exercícios
+        run: |
+          echo "Validando Prometheus (Passo 2)..."
+          curl -f http://localhost:9090/-/healthy
+
+          echo "Validando Elasticsearch (Passo 4)..."
+          curl -f http://localhost:9200/
+
+          echo "Validando Loki (Passo 5)..."
+          curl -f http://localhost:3100/ready
