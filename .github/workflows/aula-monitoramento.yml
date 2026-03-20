@@ -12,7 +12,7 @@ jobs:
 
       # 2. Sobe os containers usando o docker-compose.yml criado no Passo 1
       - name: Start Services (Docker Compose)
-        run: docker-compose up -d
+        run: docker compose up -d
 
       # 3. Configura o ambiente Node.js
       - name: Setup Node
