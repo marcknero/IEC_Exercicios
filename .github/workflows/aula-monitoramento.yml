@@ -5,48 +5,43 @@ jobs:
   check-stack:
     runs-on: ubuntu-latest
 
-    # Sobe todos os serviços da aula como containers temporários
-    services:
-      prometheus:
-        image: prom/prometheus:latest
-        volumes:
-          - ${{ github.workspace }}/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-        ports: [9090:9090]
-
-      elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
-        env:
-          discovery.type: single-node
-          xpack.security.enabled: false
-        ports: [9200:9200]
-
-      loki:
-        image: grafana/loki:latest
-        ports: [3100:3100]
-
     steps:
-      - uses: actions/checkout@v4
+      # 1. Primeiro, baixa o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      # 2. Sobe os containers usando o docker-compose.yml criado no Passo 1
+      - name: Start Services (Docker Compose)
+        run: docker-compose up -d
+
+      # 3. Configura o ambiente Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 4. Instala dependências e roda a aplicação em background
       - name: Install & Run App
         run: |
           npm install
-          # Cria o arquivo de log que o Logstash espera (Exercício 2)
-          touch app.log 
-          node index.js > app.log & 
-          sleep 20 # Tempo para os serviços "respirarem"
+          touch app.log
+          node index.js > app.log &
+          # Aguarda os serviços e a aplicação subirem totalmente
+          sleep 30
 
+      # 5. Valida se os serviços estão respondendo
       - name: Validar Exercícios
         run: |
-          echo "Validando Prometheus (Passo 2)..."
+          echo "Validando Prometheus..."
           curl -f http://localhost:9090/-/healthy
 
-          echo "Validando Elasticsearch (Passo 4)..."
+          echo "Validando Elasticsearch..."
           curl -f http://localhost:9200/
 
-          echo "Validando Loki (Passo 5)..."
+          echo "Validando Loki..."
           curl -f http://localhost:3100/ready
+
+      # 6. (Opcional) Mostra logs em caso de erro para debug
+      - name: Docker Logs on Failure
+        if: failure()
+        run: docker-compose logs
