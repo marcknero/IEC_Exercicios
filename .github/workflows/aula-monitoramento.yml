@@ -11,8 +11,18 @@ jobs:
         uses: actions/checkout@v4
 
       # 2. Sobe os containers usando o docker-compose.yml criado no Passo 1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Instalar o Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
+
       - name: Start Services (Docker Compose)
-        run: docker compose up -d
+        run: |
+          docker compose up -d || docker-compose up -d
 
       # 3. Configura o ambiente Node.js
       - name: Setup Node
@@ -38,8 +48,18 @@ jobs:
           echo "Validando Elasticsearch..."
           curl -f http://localhost:9200/
 
-          echo "Validando Loki..."
-          curl -f http://localhost:3100/ready
+          echo "Validando Loki (Aguardando até 30s)..."
+          # Loop de tentativa para o Loki (Error 503 costuma ser temporário no boot)
+          count=0
+          until $(curl -sSf http://localhost:3100/ready > /dev/null 2>&1) || [ $count -eq 6 ]; do
+            echo "Loki ainda não está pronto... tentando novamente em 5s"
+            sleep 5
+            ((count++))
+          done
+
+          # Validação final do Loki
+          curl -f http://localhost:3100/ready || (echo "Loki falhou após 30s" && docker compose logs loki && exit 1)
+
 
       # 6. (Opcional) Mostra logs em caso de erro para debug
       - name: Docker Logs on Failure
