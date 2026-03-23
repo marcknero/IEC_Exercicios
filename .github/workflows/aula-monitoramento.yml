@@ -20,6 +20,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
 
+      - name: Setup Docker Compose Alias
+        run: |
+          # Cria um link simbólico para que 'docker-compose' funcione como 'docker compose'
+          sudo ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+
+
       - name: Start Services (Docker Compose)
         run: |
           docker compose up -d || docker-compose up -d
