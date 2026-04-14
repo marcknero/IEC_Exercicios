@@ -6,68 +6,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Primeiro, baixa o código do repositório
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Sobe os containers usando o docker-compose.yml criado no Passo 1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      # - name: Instalar o Docker Compose
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y docker-compose-plugin
-
-      - name: Setup Docker Compose Alias
-        run: |
-          # Cria um link simbólico para que 'docker-compose' funcione como 'docker compose'
-          sudo ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
-
-
+      # O Docker Compose V2 já está presente no runner do GitHub
       - name: Start Services (Docker Compose)
         run: |
-          docker compose up -d || docker-compose up -d
+          docker compose up -d
+          # Aguarda um pouco para os containers iniciarem o processo de boot
+          sleep 10
 
-      # 3. Configura o ambiente Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # 4. Instala dependências e roda a aplicação em background
       - name: Install & Run App
         run: |
           npm install
           touch app.log
-          node index.js > app.log &
-          # Aguarda os serviços e a aplicação subirem totalmente
-          sleep 30
+          # Rodar em background redirecionando erro e saída
+          node index.js > app.log 2>&1 & 
+          sleep 20
 
-      # 5. Valida se os serviços estão respondendo
       - name: Validar Exercícios
         run: |
+          echo "=== Verificando Saúde dos Containers ==="
+          docker ps
+
           echo "Validando Prometheus..."
-          curl -f http://localhost:9090/-/healthy
+          curl -f --retry 5 --retry-delay 5 http://localhost:9090/-/healthy
 
           echo "Validando Elasticsearch..."
-          curl -f http://localhost:9200/
+          # O Elasticsearch demora a subir, o parâmetro --retry ajuda
+          curl -f --retry 10 --retry-connrefused --retry-delay 10 http://localhost:9200/
 
-          echo "Validando Loki (Aguardando até 30s)..."
-          # Loop de tentativa para o Loki (Error 503 costuma ser temporário no boot)
-          count=0
-          until $(curl -sSf http://localhost:3100/ready > /dev/null 2>&1) || [ $count -eq 6 ]; do
-            echo "Loki ainda não está pronto... tentando novamente em 5s"
-            sleep 5
-            ((count++))
-          done
+          echo "Validando Loki..."
+          # Simplificando o loop com flags nativas do curl
+          curl -f --retry 10 --retry-connrefused --retry-delay 5 http://localhost:3100/ready
 
-          # Validação final do Loki
-          curl -f http://localhost:3100/ready || (echo "Loki falhou após 30s" && docker compose logs loki && exit 1)
-
-
-      # 6. (Opcional) Mostra logs em caso de erro para debug
       - name: Docker Logs on Failure
         if: failure()
-        run: docker compose logs
+        run: |
+          echo "=== LOGS DO APP NODE ==="
+          cat app.log
+          echo "=== LOGS DO DOCKER COMPOSE ==="
+          docker compose logs
