@@ -1,0 +1,54 @@
+name: Teste de Monitoramento Aula 5
+on: [push]
+
+jobs:
+  check-stack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # O Docker Compose V2 já está presente no runner do GitHub
+      - name: Start Services (Docker Compose)
+        run: |
+          docker compose up -d
+          # Aguarda um pouco para os containers iniciarem o processo de boot
+          sleep 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install & Run App
+        run: |
+          npm install
+          touch app.log
+          # Rodar em background redirecionando erro e saída
+          node index.js > app.log 2>&1 & 
+          sleep 20
+
+      - name: Validar Exercícios
+        run: |
+          echo "=== Verificando Saúde dos Containers ==="
+          docker ps
+
+          echo "Validando Prometheus..."
+          curl -f --retry 5 --retry-delay 5 http://localhost:9090/-/healthy
+
+          echo "Validando Elasticsearch..."
+          # O Elasticsearch demora a subir, o parâmetro --retry ajuda
+          curl -f --retry 10 --retry-connrefused --retry-delay 10 http://localhost:9200/
+
+          echo "Validando Loki..."
+          # Simplificando o loop com flags nativas do curl
+          curl -f --retry 10 --retry-connrefused --retry-delay 5 http://localhost:3100/ready
+
+      - name: Docker Logs on Failure
+        if: failure()
+        run: |
+          echo "=== LOGS DO APP NODE ==="
+          cat app.log
+          echo "=== LOGS DO DOCKER COMPOSE ==="
+          docker compose logs
