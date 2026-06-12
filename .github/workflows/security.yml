@@ -28,3 +28,6 @@ jobs:
           npm audit fix
           npm test
           npm test -- --coverage
+
+      - name: upload cobertura para Codecov
+        uses: codecov/codecov-action@v3

@@ -11,3 +11,7 @@ Com base em um projeto fictício, apenas para estudo das entregas e praticas dos
 _Objetivo:_ App movel para alerta de queimadas, inundações, desmatamento, e relatos da população em tempo real.
 
 _Nome do app, e demais, serão ficticios e temporarios, apenas para efeito de estudos_
+
+
+[![codecov](https://codecov.io/gh/SEU_USUARIO/SEU_REPO/branch/main/graph/badge.svg)](https://codecov.io/)
+
