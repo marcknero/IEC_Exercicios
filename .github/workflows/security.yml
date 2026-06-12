@@ -1,0 +1,28 @@
+name: teste audit aula 7
+on: [push]
+
+jobs:
+  check-stack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # O Docker Compose V2 já está presente no runner do GitHub
+      - name: Start Services (Docker Compose)
+        run: |
+          docker compose up -d
+          # Aguarda um pouco para os containers iniciarem o processo de boot
+          sleep 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install & Run App
+        run: |
+          npm install
+          npm audit
+          npm audit fix
